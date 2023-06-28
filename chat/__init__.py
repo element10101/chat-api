@@ -1,4 +1,5 @@
 from requests import get, post
+from .exceptions import APIKeyError
 
 class Client:
   def __init__(self, api_key: str) -> None:
@@ -11,3 +12,7 @@ class Client:
     if data.status_code != 200:
       data.raise_for_status()
     data = data.json()
+    if data == { "error": "Bad API key" }:
+      raise APIKeyError(f"API key {self.api_key} is invalid.")
+    else:
+      return data
