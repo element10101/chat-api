@@ -19,3 +19,5 @@ class Client:
       if r["error"] == "The owner of this bot is banned":
         raise OwnerBannedError(r["error"])
       elif r["error"] == "Message included XSS, the owner and bot have been banned":
+        raise XSSDetectedError(r["error"])
+        
