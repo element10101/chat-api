@@ -10,3 +10,12 @@ class Client:
       "pfp": pfp_url,
       "message": message
     })
+    if r.status_code != 200:
+      r.raise_for_status()
+    r = r.json()
+    if "success" in r:
+      return
+    else:
+      if r["error"] == "The owner of this bot is banned":
+        raise OwnerBannedError(r["error"])
+      elif r["error"] == "Message included XSS, the owner and bot have been banned":
