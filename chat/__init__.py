@@ -1,18 +1,12 @@
-from requests import get, post
-from .exceptions import APIKeyError
+from requests import post
+from .exceptions import *
 
 class Client:
   def __init__(self, api_key: str) -> None:
     self.api_key = api_key
-  def getTheme(self, user: str) -> str:
-    data = post("https://chat.element1010.repl.co/api/get-theme", json={
+  def postMessage(self, message: str, pfp_url: str | None = None) -> None:
+    r = post("https://chat.element1010.repl.co/api/post", json={
       "apiKey": self.api_key,
-      "user": user
+      "pfp": pfp_url,
+      "message": message
     })
-    if data.status_code != 200:
-      data.raise_for_status()
-    data = data.json()
-    if data == { "error": "Bad API key" }:
-      raise APIKeyError(f"API key {self.api_key} is invalid.")
-    else:
-      return data
